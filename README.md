@@ -64,7 +64,7 @@ You can upload your bot to https://dynamite.softwire.com to play against bots th
 
 ## Tournament Ready
 
-Towards the end of this exercise, I will create a tournament for everyone's bots (and a few additional simple bots of my own). You will be able to enter you bot into the tournament on the Dynamite website.
+Towards the end of this exercise, I will create a tournament for everyone's bots. You will be able to enter you bot into the tournament on the Dynamite website.
 
 A few notes to make this as fun as possible:
 - Make sure you count your dynamite! There is nothing worse than losing a game at the last minute by attempting to use too much.
