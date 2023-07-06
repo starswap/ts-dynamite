@@ -68,6 +68,7 @@ class Bot {
     private in_exploration_phase = true;
     private my_score = 0;
     private opponent_score = 0;
+    private resets = 0;
     private opponent_dynamite = 0;
 
     getTurnScore(gamestate: Gamestate) {
@@ -83,6 +84,9 @@ class Bot {
         this.turn_number++;
 
         if (gamestate.rounds.length >= 1) {
+            if (this.expected_moves[this.prev_score] != undefined && this.expected_moves[this.prev_score] != gamestate.rounds[gamestate.rounds.length - 1].p2) {
+                this.resets++;
+            }
             this.expected_moves[this.prev_score] = gamestate.rounds[gamestate.rounds.length - 1].p2; // what we expect them to do
             if (gamestate.rounds[gamestate.rounds.length - 1].p2 == 'D') {
                 this.opponent_dynamite++;
@@ -104,7 +108,7 @@ class Bot {
                     result = 'D';
                     console.log("c")
                 }
-                this.in_exploration_phase = (this.turn_number <= 500); // decide if we need to leave the exploration phase
+                this.in_exploration_phase = (this.dyn_used <= 50) && (this.turn_number <= 1000); // decide if we need to leave the exploration phase
             } else { // at the end and not exploiting
                 if (this.expected_moves[turnScore] == undefined) { // need to end this - just play dynamite
                     result = 'D';
