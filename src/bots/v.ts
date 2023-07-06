@@ -3,7 +3,7 @@ import { Gamestate, BotSelection } from '../models/gamestate';
 const MAX_DYNAMITE = 100;
 const MAX_TURNS = 2500;
 const PTS_TO_WIN = 1000;
-const TIE_THRESHOLD = 3;
+const TIE_THRESHOLD = 2;
 
 declare global {
     interface Array<T> {
@@ -68,6 +68,7 @@ class Bot {
     private in_exploration_phase = true;
     private my_score = 0;
     private opponent_score = 0;
+    private opponent_dynamite = 0;
 
     getTurnScore(gamestate: Gamestate) {
         return gamestate.rounds.reverse().takeWhile(({p1: p1, p2: p2}) => p1 == p2).length + 1;
@@ -83,6 +84,9 @@ class Bot {
 
         if (gamestate.rounds.length >= 1) {
             this.expected_moves[this.prev_score] = gamestate.rounds[gamestate.rounds.length - 1].p2; // what we expect them to do
+            if (gamestate.rounds[gamestate.rounds.length - 1].p2 == 'D') {
+                this.opponent_dynamite++;
+            }
         }
 
         const turnScore = this.getTurnScore(gamestate);
@@ -117,7 +121,12 @@ class Bot {
 
         if (result == 'D') {
             if (this.dyn_used == MAX_DYNAMITE) {
-                return 'W';
+                if (this.opponent_dynamite < MAX_DYNAMITE) {
+                    return 'W';
+                } else {
+                    return getRandomChoice(['R','P','S']);
+                }
+                
             } else {
                 this.dyn_used++;
             }
